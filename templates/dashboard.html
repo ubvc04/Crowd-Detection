@@ -84,8 +84,9 @@
     </div>
 
     <!-- Audio element for alarm sound -->
-    <audio id="alarmSound" loop>
+    <audio id="alarmSound" loop preload="auto">
         <source src="{{ url_for('static', filename='sounds/alarm.mp3') }}" type="audio/mpeg">
+        <source src="{{ url_for('static', filename='sounds/alarm.wav') }}" type="audio/wav">
         Your browser does not support audio.
     </audio>
 

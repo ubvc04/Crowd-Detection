@@ -6,6 +6,18 @@
 // Audio element for alarm
 const alarmSound = document.getElementById('alarmSound');
 let isAlarmPlaying = false;
+let audioContext = null;
+let oscillator = null;
+let gainNode = null;
+
+// Initialize Web Audio API for fallback beep sound
+function initWebAudio() {
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+        console.error('Web Audio API not supported:', e);
+    }
+}
 
 // Update count and alarm status every second
 function updateDetectionStatus() {
@@ -53,26 +65,89 @@ function updateDetectionStatus() {
 
 // Play alarm sound
 function playAlarm() {
-    if (alarmSound) {
+    // Try to play the alarm.mp3 file first
+    if (alarmSound && alarmSound.src) {
         alarmSound.play()
             .then(() => {
                 isAlarmPlaying = true;
-                console.log('Alarm started');
+                console.log('Alarm started (audio file)');
             })
             .catch(error => {
-                console.error('Error playing alarm:', error);
+                console.warn('Audio file not available, using beep fallback:', error);
+                // Fallback to beep sound
+                playBeepAlarm();
             });
+    } else {
+        // No audio file, use beep fallback
+        console.log('No alarm.mp3 found, using beep fallback');
+        playBeepAlarm();
+    }
+}
+
+// Fallback beep alarm using Web Audio API
+function playBeepAlarm() {
+    if (!audioContext) {
+        initWebAudio();
+    }
+    
+    if (audioContext && !oscillator) {
+        try {
+            // Create oscillator for beep sound
+            oscillator = audioContext.createOscillator();
+            gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Set alarm sound properties (alternating beep)
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 800; // 800 Hz beep
+            gainNode.gain.value = 0.3; // 30% volume
+            
+            oscillator.start();
+            isAlarmPlaying = true;
+            
+            // Modulate frequency for siren effect
+            let isHigh = true;
+            setInterval(() => {
+                if (isAlarmPlaying && oscillator) {
+                    oscillator.frequency.value = isHigh ? 800 : 600;
+                    isHigh = !isHigh;
+                }
+            }, 500); // Alternate every 500ms
+            
+            console.log('Beep alarm started');
+        } catch (error) {
+            console.error('Error creating beep alarm:', error);
+        }
     }
 }
 
 // Stop alarm sound
 function stopAlarm() {
+    // Stop audio file if playing
     if (alarmSound) {
         alarmSound.pause();
         alarmSound.currentTime = 0;
-        isAlarmPlaying = false;
-        console.log('Alarm stopped');
     }
+    
+    // Stop beep sound if playing
+    if (oscillator) {
+        try {
+            oscillator.stop();
+            oscillator.disconnect();
+            oscillator = null;
+            if (gainNode) {
+                gainNode.disconnect();
+                gainNode = null;
+            }
+        } catch (error) {
+            console.error('Error stopping beep:', error);
+        }
+    }
+    
+    isAlarmPlaying = false;
+    console.log('Alarm stopped');
 }
 
 // Update threshold bar visualization
@@ -100,8 +175,12 @@ setInterval(updateDetectionStatus, 1000);
 // Initial update
 updateDetectionStatus();
 
+// Initialize Web Audio on page load
+initWebAudio();
+
 // Stop detection when leaving page
 window.addEventListener('beforeunload', function() {
+    stopAlarm(); // Ensure alarm is stopped
     fetch('/stop_detection')
         .catch(error => console.error('Error stopping detection:', error));
 });
