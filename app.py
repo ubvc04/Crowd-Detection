@@ -61,8 +61,8 @@ def generate_frames():
         # Update people count
         people_count = len(faces)
         
-        # Check if alarm should be triggered (more than 2 people)
-        if people_count > 2:
+        # Check if alarm should be triggered (more than 5 people)
+        if people_count > 5:
             alarm_triggered = True
         else:
             alarm_triggered = False
