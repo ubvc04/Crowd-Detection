@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crowd Detection System - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="animated-bg">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <!-- Main container -->
+    <div class="container">
+        <div class="home-card">
+            <h1 class="title fade-in">🎥 Real-Time Crowd Detection System</h1>
+            <p class="subtitle fade-in-delay">AI-Powered People Counting with Smart Alarm</p>
+            
+            <div class="features fade-in-delay-2">
+                <div class="feature-item">
+                    <span class="icon">👥</span>
+                    <p>Live Detection</p>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">🔔</span>
+                    <p>Smart Alerts</p>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">🔒</span>
+                    <p>Secure Access</p>
+                </div>
+            </div>
+
+            <div class="button-group fade-in-delay-3">
+                <a href="{{ url_for('login') }}" class="btn btn-primary">
+                    <span>Login</span>
+                </a>
+                <a href="{{ url_for('signup') }}" class="btn btn-secondary">
+                    <span>Sign Up</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

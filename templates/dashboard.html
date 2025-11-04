@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Detection Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dashboard-body">
+    <!-- Animated background -->
+    <div class="animated-bg dashboard-bg">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <!-- Dashboard header -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <h1>🎥 Live Crowd Detection</h1>
+            <div class="user-info">
+                <span>Welcome, <strong>{{ username }}</strong></span>
+                <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main dashboard content -->
+    <div class="dashboard-container">
+        <!-- Live camera feed section -->
+        <div class="video-section fade-in">
+            <div class="video-card">
+                <h2>📹 Live Camera Feed</h2>
+                <div class="video-container">
+                    <img src="{{ url_for('video_feed') }}" alt="Live Camera Feed" class="video-stream">
+                </div>
+                <p class="video-info">Real-time detection using OpenCV AI</p>
+            </div>
+        </div>
+
+        <!-- Stats and control section -->
+        <div class="stats-section fade-in-delay">
+            <!-- People count display -->
+            <div class="stat-card pulse">
+                <div class="stat-icon">👥</div>
+                <div class="stat-content">
+                    <h3>People Detected</h3>
+                    <div class="stat-value" id="peopleCount">0</div>
+                    <p class="stat-label">Live Count</p>
+                </div>
+            </div>
+
+            <!-- Alarm status display -->
+            <div class="stat-card" id="alarmCard">
+                <div class="stat-icon">🔔</div>
+                <div class="stat-content">
+                    <h3>Alarm Status</h3>
+                    <div class="stat-value" id="alarmStatus">OFF</div>
+                    <p class="stat-label" id="alarmText">Monitoring...</p>
+                </div>
+            </div>
+
+            <!-- Information card -->
+            <div class="info-card">
+                <h3>ℹ️ System Information</h3>
+                <ul>
+                    <li>✅ Detection updates every second</li>
+                    <li>🔊 Alarm triggers at 5+ people</li>
+                    <li>📊 Real-time count display</li>
+                    <li>🎯 AI-powered face detection</li>
+                </ul>
+            </div>
+
+            <!-- Threshold indicator -->
+            <div class="threshold-card">
+                <h3>⚠️ Threshold Settings</h3>
+                <div class="threshold-bar">
+                    <div class="threshold-fill" id="thresholdFill"></div>
+                </div>
+                <p>Alarm threshold: <strong>5 people</strong></p>
+                <p id="thresholdText">Current: 0% of threshold</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio element for alarm sound -->
+    <audio id="alarmSound" loop>
+        <source src="{{ url_for('static', filename='sounds/alarm.mp3') }}" type="audio/mpeg">
+        Your browser does not support audio.
+    </audio>
+
+    <!-- Dashboard JavaScript -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

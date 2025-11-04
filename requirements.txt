@@ -1,0 +1,13 @@
+# Real-Time Crowd Detection System - Dependencies
+
+# Flask web framework
+Flask==3.0.0
+
+# OpenCV for computer vision and camera detection
+opencv-python==4.8.1.78
+
+# Numpy (required by OpenCV)
+numpy==1.24.3
+
+# Werkzeug (Flask dependency for security)
+Werkzeug==3.0.1
