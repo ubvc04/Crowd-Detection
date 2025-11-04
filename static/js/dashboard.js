@@ -24,7 +24,7 @@ function updateDetectionStatus() {
             if (data.alarm) {
                 // Alarm should be triggered
                 alarmStatus.textContent = 'ACTIVE!';
-                alarmText.textContent = 'More than 5 people detected!';
+                alarmText.textContent = 'More than 2 people detected!';
                 alarmCard.classList.add('alarm-active');
                 
                 // Play alarm sound if not already playing
@@ -80,14 +80,14 @@ function updateThresholdBar(count) {
     const thresholdFill = document.getElementById('thresholdFill');
     const thresholdText = document.getElementById('thresholdText');
     
-    // Calculate percentage (threshold is 5)
-    const percentage = Math.min((count / 5) * 100, 100);
+    // Calculate percentage (threshold is 2)
+    const percentage = Math.min((count / 2) * 100, 100);
     
     thresholdFill.style.width = percentage + '%';
     thresholdText.textContent = `Current: ${percentage.toFixed(0)}% of threshold`;
     
     // Change color when approaching threshold
-    if (count > 3) {
+    if (count > 1) {
         thresholdFill.classList.add('warning');
     } else {
         thresholdFill.classList.remove('warning');
